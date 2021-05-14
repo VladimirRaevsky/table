@@ -1,3 +1,5 @@
+"use strict";
+
 const dataExample = [
     {
         company: 'Alfreds <b>Futterkiste</b>',
@@ -27,25 +29,29 @@ const dataExample = [
 ];
 
 let gridView = new GridView();
-gridView.header = 'Hello';
-gridView.headerClass = ['header', 'site-header'];
-gridView.attribute = {
-    'company': {
-        'label': 'Компания',
-        'src': 'html',
-    },
-    'chef': {
-        'label': 'Директор',
-    },
-    'country': {
-        'label': 'Страна',
-        'value': (data) => {
-            if (data['country'] === 'Germany') {
-                return data['country'] + ' map'
+
+
+const data = {
+    header: 'Hello',
+    headerClass:['header', 'site-header', 'ho-ho-ho'],
+    attribute:{
+        'company': {
+            'label': 'Компания',
+            'src': 'html',
+        },
+        'chef': {
+            'label': 'Директор',
+        },
+        'country': {
+            'label': 'Страна',
+            'value': (data) => {
+                if(data['country'] === 'Germany') {
+                    return data['country'] + ' ok';
+                }
+                return data['country'];
             }
-            return data['country'];
         }
-    }
+    },
+    data: dataExample
 };
-gridView.data = dataExample;
-gridView.render();
+gridView.render(data);

@@ -1,15 +1,15 @@
 class GridView {
     /**
-     *  properties
-     *  @param [array] _tableClass - css классы оформления
-     *  @param [array] data  - выходные данные
-     *  @param [array] attribute - управляем что выводим 
-     *  @param [array] _element  - куда выводить таблицу
-     *  @param [array] _header  - заголовок таблицы
-     *  @param [array] _headerClass  - css классы заголовка
+     * properties
+     * 
+     *  @param [array] _tableClass - css table classes
+     *  @param [array] data - output
+     *  @param [array] attribute - we control what we output
+     *  @param [array] _element - where do we display the table
+     *  @param [array] _header - table header
+     *  @param [array] _headerClass - css clearance classes header
      */
-
-    constructor() {
+    constructor(){
         this._header = '';
         this._headerClass = [];
         this._tableClass = [];
@@ -18,11 +18,10 @@ class GridView {
     }
 
     /**
-    *  Method set header
+     * Method set header
     */
-
-    set header(header) {
-        if (typeof header === 'string' && header.trim() != '') {
+    setHeader(header){
+        if(typeof header === 'string' && header.trim() != ''){
             this._header = header.trim();
             return true;
         }
@@ -30,11 +29,10 @@ class GridView {
     }
 
     /**
-    *  Method set header
+     * Method set headerClass
     */
-
-    set headerClass(headerClass) {
-        if (typeof headerClass === 'object') {
+    setHeaderClass(headerClass){
+        if(typeof headerClass === 'object'){
             this._headerClass = headerClass;
             return true;
         }
@@ -42,11 +40,10 @@ class GridView {
     }
 
     /**
-    *  Method set element
+     * Method set element
     */
-
-    set element(element) {
-        if (document.querySelector(element)) {
+    setElement(element){
+        if(document.querySelector(element)){
             this._element = element;
             return true;
         }
@@ -55,12 +52,17 @@ class GridView {
 
 
     /**
-     *  Method for show GridViewTable
-     */
+     * Method table display
+    */
 
-    render() {
-        // show header
-        if (this._header) {
+    render(data){
+        this.setHeader(data.header);
+        this.setHeaderClass(data.headerClass);
+        this.setElement(data.element);
+        this.attribute = data.attribute;
+        this.data = data.data;
+        //show header
+        if(this._header){
             const header = document.createElement('h1');
             header.textContent = this._header;
             this._headerClass.forEach(cssClass => {
@@ -68,16 +70,17 @@ class GridView {
             });
             document.querySelector(this._element).append(header);
         }
-        // show table
+        // show table 
         const table = document.createElement('table');
-        this._tableClass.forEach(cssClass => {
-            table.classList.add(cssClass);
-        });
+            this._tableClass.forEach(cssClass => {
+                table.classList.add(cssClass);
+            });
+
         // create table header
-        let trHeader = document.createElement('tr');
-        for (let key in this.attribute) {
-            let th = document.createElement('th');
-            if (this.attribute[key].label) {
+        const trHeader = document.createElement('tr');
+        for(let key in this.attribute){
+            const th = document.createElement('th');
+            if(this.attribute[key].label){
                 th.textContent = this.attribute[key].label;
             }
             else {
@@ -86,18 +89,20 @@ class GridView {
             trHeader.append(th);
         }
         table.append(trHeader);
-        // draw table
+        
+
+        //draw tabl
         for (let i = 0; i < this.data.length; i++) {
-            let dataArr = this.data[i]; // одна строка данных
-            let tr = document.createElement('tr');
-            for (let key in this.attribute) {
-                let td = document.createElement('td');
+            const dataArr = this.data[i]; 
+            console.log(dataArr);
+            const tr = document.createElement('tr');
+            for(let key in this.attribute){
+                const td = document.createElement('td');
+                console.log(dataArr[key]);
                 let value = dataArr[key];
-                // есть ли функция в value
                 if (this.attribute[key].value) {
                     value = this.attribute[key].value(dataArr);
                 }
-                // атрибут src
                 if (this.attribute[key].src) {
                     td.innerHTML = value;
                 }
@@ -108,7 +113,7 @@ class GridView {
             }
             table.append(tr);
         }
-
         document.querySelector(this._element).append(table);
     }
+
 }
